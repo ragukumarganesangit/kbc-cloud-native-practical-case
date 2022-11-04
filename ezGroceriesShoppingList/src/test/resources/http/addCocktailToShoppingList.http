@@ -1,0 +1,6 @@
+PUT http://localhost:8080/shopping-lists/90689338-499a-4c49-af90-f1e73068ad4f/cocktails
+
+Accept: application/json
+Content-Type: application/json
+
+{"cocktailId": "23b3d85a-3928-41c0-a533-6538a71e17c4"}
