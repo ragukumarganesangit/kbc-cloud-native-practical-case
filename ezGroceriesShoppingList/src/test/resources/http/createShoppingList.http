@@ -1,0 +1,5 @@
+POST http://localhost:8080/shopping-lists
+Accept: application/json
+Content-Type: application/json
+
+{"shoppingListName": "Stephanie's birthday"}

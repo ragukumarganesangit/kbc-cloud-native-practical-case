@@ -1,0 +1,9 @@
+GET http://localhost:8080/cocktails?search=Margerita
+Accept: application/json
+Content-Type: application/json
+
+### Below request will get all cocktails
+
+GET http://localhost:8080/cocktails
+Accept: application/json
+Content-Type: application/json
