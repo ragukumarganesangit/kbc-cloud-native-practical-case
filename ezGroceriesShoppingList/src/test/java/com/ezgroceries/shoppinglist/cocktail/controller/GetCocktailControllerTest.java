@@ -1,6 +1,8 @@
 package com.ezgroceries.shoppinglist.cocktail.controller;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -9,23 +11,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ezgroceries.shoppinglist.cocktail.CocktailTestConfiguration;
 import com.ezgroceries.shoppinglist.cocktail.service.GroceriesServiceImpl;
+import com.ezgroceries.shoppinglist.feignclient.client.CocktailDBClient;
+import com.ezgroceries.shoppinglist.feignclient.model.CocktailDBResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = GetCocktailController.class)
-@ContextConfiguration(classes = {GetCocktailController.class, GroceriesServiceImpl.class})
+@ContextConfiguration(classes = {GetCocktailController.class, GroceriesServiceImpl.class, CocktailTestConfiguration.class})
 class GetCocktailControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
+    private CocktailDBClient cocktailDBClient;
+
+    @Autowired
+    private CocktailDBResponse cocktailDBResponse;
+
+    @Autowired
+    private CocktailDBResponse cocktailDBResponseAllData;
+
     @Test
     public void testGetAllCocktailController() throws Exception {
+        when(cocktailDBClient.searchCocktails(null)).thenReturn(cocktailDBResponseAllData);
         mvc.perform(get("/cocktails"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -36,6 +52,9 @@ class GetCocktailControllerTest {
 
     @Test
     public void testGetCocktailByNameController() throws Exception {
+
+        when(cocktailDBClient.searchCocktails(anyString())).thenReturn(cocktailDBResponse);
+
         mvc.perform(get("/cocktails?search=Margerita"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -45,6 +64,7 @@ class GetCocktailControllerTest {
 
     @Test
     public void testGetCocktailControllerNull() throws Exception {
+        when(cocktailDBClient.searchCocktails(anyString())).thenReturn(cocktailDBResponse);
         mvc.perform(get("/cocktails?search=test"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

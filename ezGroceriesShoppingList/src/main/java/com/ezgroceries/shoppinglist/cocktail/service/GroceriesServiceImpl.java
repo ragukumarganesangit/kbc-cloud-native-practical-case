@@ -2,6 +2,9 @@ package com.ezgroceries.shoppinglist.cocktail.service;
 
 import com.ezgroceries.shoppinglist.cocktail.model.Cocktail;
 import com.ezgroceries.shoppinglist.cocktail.model.ShoppingList;
+import com.ezgroceries.shoppinglist.feignclient.client.CocktailDBClient;
+import com.ezgroceries.shoppinglist.feignclient.model.CocktailDBResponse;
+import com.ezgroceries.shoppinglist.feignclient.model.CocktailDBResponse.DrinkResource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,16 +18,23 @@ public class GroceriesServiceImpl implements GroceriesService {
     private List<Cocktail> cocktailList;
     private List<ShoppingList> shoppingList;
 
+    private CocktailDBClient dbClient;
+
+    public GroceriesServiceImpl(CocktailDBClient dbClient) {
+        this.dbClient = dbClient;
+    }
+
     private static final Logger log = LoggerFactory.getLogger(GroceriesServiceImpl.class);
 
 
     @Override
     public List<Cocktail> getCocktailByName(String cocktailName) {
-        cocktailList = fillCocktail();
+        CocktailDBResponse cocktailDBResponse = dbClient.searchCocktails(cocktailName);
+        cocktailList = fillCocktailWithActualValue(cocktailDBResponse);
         if (cocktailName == null || cocktailName.isEmpty()) {
             return cocktailList;
         }
-        return cocktailList.stream().filter(c -> c.getName().equals(cocktailName)).collect(Collectors.toList());
+        return cocktailList.stream().filter(c -> c.getName().toLowerCase().contains(cocktailName.toLowerCase())).collect(Collectors.toList());
     }
 
     @Override
@@ -70,6 +80,16 @@ public class GroceriesServiceImpl implements GroceriesService {
         cocktailList.add(margerita);
         cocktailList.add(blueMargerita);
         return cocktailList;
+    }
+
+    private List<Cocktail> fillCocktailWithActualValue(CocktailDBResponse cocktailDBResponse) {
+        return cocktailDBResponse.getDrinks().stream().map(this::mapCocktailObject).collect(Collectors.toList());
+    }
+
+    private Cocktail mapCocktailObject(DrinkResource drinkResource) {
+        return  new Cocktail(drinkResource.getIdDrink(), drinkResource.getStrDrink(), drinkResource.getStrGlass(),
+                drinkResource.getStrInstructions(), drinkResource.getStrDrinkThumb(), List.of(drinkResource.getStrIngredient1() != null ? drinkResource.getStrIngredient1():" ",
+                drinkResource.getStrIngredient2() != null ? drinkResource.getStrIngredient2():" ", drinkResource.getStrIngredient3() != null ? drinkResource.getStrIngredient3():" "));
     }
 
     private List<ShoppingList> fillShoppingList() {
