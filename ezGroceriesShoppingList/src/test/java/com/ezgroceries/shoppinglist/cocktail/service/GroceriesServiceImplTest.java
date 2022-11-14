@@ -4,10 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ezgroceries.shoppinglist.cocktail.model.Cocktail;
 import com.ezgroceries.shoppinglist.cocktail.model.ShoppingList;
+import com.ezgroceries.shoppinglist.feignclient.client.CocktailDBClient;
+import com.ezgroceries.shoppinglist.feignclient.model.CocktailDBResponse;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class GroceriesServiceImplTest {
@@ -15,8 +19,17 @@ class GroceriesServiceImplTest {
     @Autowired
     private GroceriesService groceriesService;
 
+    @MockBean
+    private CocktailDBClient cocktailDBClient;
+
+    @Autowired
+    private CocktailDBResponse cocktailDBResponse;
+
+
     @Test
     void getCocktailNamefound() {
+        when(cocktailDBClient.searchCocktails(anyString())).thenReturn(cocktailDBResponse);
+
         List<Cocktail> cocktailList = groceriesService.getCocktailByName("Margerita");
         assertThat(cocktailList).isNotNull();
         assertThat(cocktailList.size()).isEqualTo(1);
@@ -25,6 +38,7 @@ class GroceriesServiceImplTest {
 
     @Test
     void getCocktailNameNotfound() {
+        when(cocktailDBClient.searchCocktails(anyString())).thenReturn(cocktailDBResponse);
         List<Cocktail> cocktailList = groceriesService.getCocktailByName("test");
         assertThat(cocktailList.size()).isEqualTo(0);
     }
