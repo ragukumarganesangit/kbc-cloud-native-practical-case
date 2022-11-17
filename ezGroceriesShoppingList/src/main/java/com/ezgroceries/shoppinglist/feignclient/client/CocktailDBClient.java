@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface CocktailDBClient {
 
     @GetMapping(value = "search.php")  //URL:https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita
-    CocktailDBResponse searchCocktails(@RequestParam("s") String search);
+    CocktailDBResponse searchCocktails(@RequestParam(value = "s", required = false) String search);
 
 }

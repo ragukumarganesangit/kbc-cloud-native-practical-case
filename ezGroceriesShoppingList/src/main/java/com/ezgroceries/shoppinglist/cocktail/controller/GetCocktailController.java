@@ -2,6 +2,7 @@ package com.ezgroceries.shoppinglist.cocktail.controller;
 
 import com.ezgroceries.shoppinglist.cocktail.model.Cocktail;
 import com.ezgroceries.shoppinglist.cocktail.model.ShoppingList;
+import com.ezgroceries.shoppinglist.cocktail.service.GroceriesService;
 import com.ezgroceries.shoppinglist.cocktail.service.GroceriesServiceImpl;
 import java.net.URI;
 import java.util.List;
@@ -25,16 +26,16 @@ public class GetCocktailController {
 
     private static final Logger log = LoggerFactory.getLogger(GetCocktailController.class);
 
-    private GroceriesServiceImpl groceriesService;
+    private GroceriesService groceriesService;
 
-    public GetCocktailController(GroceriesServiceImpl cocktailService) {
-        this.groceriesService = cocktailService;
+    public GetCocktailController(GroceriesServiceImpl groceriesService) {
+        this.groceriesService = groceriesService;
     }
 
     @GetMapping(value = "/cocktails")
     public List<Cocktail> getCocktails(@RequestParam(value = "search", required = false) String search) {
         log.info("Get cocktail called for name {}", search);
-        return groceriesService.getCocktailByName(search);
+        return groceriesService.getCocktailByName(search == null ? "" : search);
     }
 
     @PostMapping(value = "/shopping-lists")

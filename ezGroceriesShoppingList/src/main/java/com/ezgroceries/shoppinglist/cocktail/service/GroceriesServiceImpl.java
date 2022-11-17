@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class GroceriesServiceImpl implements GroceriesService {
 
-    private List<Cocktail> cocktailList;
-    private List<ShoppingList> shoppingList;
-
     private CocktailDBClient dbClient;
 
     public GroceriesServiceImpl(CocktailDBClient dbClient) {
@@ -30,7 +27,7 @@ public class GroceriesServiceImpl implements GroceriesService {
     @Override
     public List<Cocktail> getCocktailByName(String cocktailName) {
         CocktailDBResponse cocktailDBResponse = dbClient.searchCocktails(cocktailName);
-        cocktailList = fillCocktailWithActualValue(cocktailDBResponse);
+        List<Cocktail> cocktailList = fillCocktailWithActualValue(cocktailDBResponse);
         if (cocktailName == null || cocktailName.isEmpty()) {
             return cocktailList;
         }
@@ -39,7 +36,7 @@ public class GroceriesServiceImpl implements GroceriesService {
 
     @Override
     public List<Cocktail> getCocktailById(String cocktailId) {
-        cocktailList = fillCocktail();
+        List<Cocktail> cocktailList = fillCocktail();
         if (cocktailId == null || cocktailId.isEmpty()) {
             return cocktailList;
         }
@@ -62,7 +59,7 @@ public class GroceriesServiceImpl implements GroceriesService {
 
     @Override
     public List<ShoppingList> getShoppingListById(String shoppingListId) {
-        shoppingList = fillShoppingList();
+        List<ShoppingList> shoppingList = fillShoppingList();
         if (shoppingList == null || shoppingList.isEmpty()) {
             return shoppingList;
         }

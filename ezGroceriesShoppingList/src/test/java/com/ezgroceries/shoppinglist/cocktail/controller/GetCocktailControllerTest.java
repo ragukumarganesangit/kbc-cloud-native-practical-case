@@ -41,7 +41,7 @@ class GetCocktailControllerTest {
 
     @Test
     public void testGetAllCocktailController() throws Exception {
-        when(cocktailDBClient.searchCocktails(null)).thenReturn(cocktailDBResponseAllData);
+        when(cocktailDBClient.searchCocktails("")).thenReturn(cocktailDBResponseAllData);
         mvc.perform(get("/cocktails"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
