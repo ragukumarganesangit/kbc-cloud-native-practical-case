@@ -7,7 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-        "com.ezgroceries.shoppinglist.cocktail"})
+        "com.ezgroceries.shoppinglist.cocktail",
+        "com.ezgroceries.shoppinglist.feignclient",
+        "com.ezgroceries.shoppinglist.jpa"})
 @EnableFeignClients(basePackages = "com.ezgroceries.shoppinglist")
 public class EzGroceriesShoppingListApplication {
 

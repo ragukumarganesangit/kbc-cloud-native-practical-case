@@ -12,9 +12,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ezgroceries.shoppinglist.cocktail.CocktailTestConfiguration;
-import com.ezgroceries.shoppinglist.cocktail.service.GroceriesServiceImpl;
+import com.ezgroceries.shoppinglist.cocktail.model.ShoppingListResource;
 import com.ezgroceries.shoppinglist.feignclient.client.CocktailDBClient;
 import com.ezgroceries.shoppinglist.feignclient.model.CocktailDBResponse;
+import com.ezgroceries.shoppinglist.jpa.CocktailService;
+import com.ezgroceries.shoppinglist.jpa.ShoppingListService;
+import com.ezgroceries.shoppinglist.jpa.shoppinglist.ShoppingListRepository;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,9 +27,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = GetCocktailController.class)
-@ContextConfiguration(classes = {GetCocktailController.class, GroceriesServiceImpl.class, CocktailTestConfiguration.class})
-class GetCocktailControllerTest {
+
+@WebMvcTest(controllers = CocktailController.class)
+@ContextConfiguration(classes = {CocktailController.class, CocktailTestConfiguration.class, ShoppingListRepository.class})
+class CocktailEntityControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -38,6 +43,12 @@ class GetCocktailControllerTest {
 
     @Autowired
     private CocktailDBResponse cocktailDBResponseAllData;
+
+    @MockBean
+    private ShoppingListService shoppingListService;
+
+    @MockBean
+    private CocktailService cocktailService;
 
     @Test
     public void testGetAllCocktailController() throws Exception {
@@ -73,14 +84,16 @@ class GetCocktailControllerTest {
 
     @Test
     public void testCreateShoppingListController() throws Exception {
+        when(shoppingListService.create(anyString())).thenReturn(new ShoppingListResource("90689338-499a-4c49-af90-f1e73068ad4f", "Stephanie's birthday", null));
         mvc.perform(post("/shopping-lists").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-                        .content("{\"shoppingListName\": \"Stephanie's birthday\"}"))
+                        .content("Stephanie's birthday"))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "http://localhost/shopping-lists/90689338-499a-4c49-af90-f1e73068ad4f"));
     }
 
     @Test
     public void testAddCocktailToShoppingListController() throws Exception {
+        when(cocktailService.update(anyString(), anyString())).thenReturn(new ShoppingListResource("90689338-499a-4c49-af90-f1e73068ad4f", "Stephanie's birthday", null));
         mvc.perform(put("/shopping-lists/90689338-499a-4c49-af90-f1e73068ad4f/cocktails").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .content("{\"cocktailId\": \"23b3d85a-3928-41c0-a533-6538a71e17c4\"}"))
                 .andExpect(status().isCreated())
@@ -89,12 +102,14 @@ class GetCocktailControllerTest {
 
     @Test
     public void testGetShoppingListsController() throws Exception {
-        mvc.perform(get("/shopping-lists/90689338-499a-4c49-af90-f1e73068ad4f"))
+        when(shoppingListService.getShoppingLists()).thenReturn(
+                List.of(new ShoppingListResource("90689338-499a-4c49-af90-f1e73068ad4f", "Stephanie's birthday", null),
+                        new ShoppingListResource("23b3d85a-3928-41c0-a533-6538a71e17c4", "Ragu's birthday", null),
+                        new ShoppingListResource("d615ec78-fe93-467b-8d26-5d26d8eab073", "Ramya's birthday", null)));
+        mvc.perform(get("/shopping-lists/"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0].shoppingListId", equalTo("90689338-499a-4c49-af90-f1e73068ad4f")))
-                .andExpect(jsonPath("$.[0].cocktail[0].id", equalTo("23b3d85a-3928-41c0-a533-6538a71e17c4")))
-                .andExpect(jsonPath("$.[0].cocktail[1].id", equalTo("d615ec78-fe93-467b-8d26-5d26d8eab073")))
-                .andExpect(jsonPath("$.size()", equalTo(1)));
+                .andExpect(jsonPath("$.size()", equalTo(3)));
     }
 }

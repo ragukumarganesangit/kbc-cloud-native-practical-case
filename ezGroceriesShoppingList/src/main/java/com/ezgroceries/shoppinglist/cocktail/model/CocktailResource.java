@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class Cocktail {
+public class CocktailResource {
 
     private String id;
     private String name;
@@ -13,7 +13,7 @@ public class Cocktail {
     private String image;
     private List<String> ingredients;
 
-    public Cocktail(String id, String name, String glass, String instructions, String image, List<String> ingredients) {
+    public CocktailResource(String id, String name, String glass, String instructions, String image, List<String> ingredients) {
         this.id = id;
         this.name = name;
         this.glass = glass;
@@ -21,4 +21,9 @@ public class Cocktail {
         this.image = image;
         this.ingredients = ingredients;
     }
+
+    public CocktailResource() {
+
+    }
+
 }

@@ -1,6 +1,5 @@
-PUT http://localhost:8080/shopping-lists/90689338-499a-4c49-af90-f1e73068ad4f/cocktails
-
+PUT http://localhost:8080/shopping-lists/5c7af2dc-7ef8-489f-9327-64cb15a8cdcf/cocktails
 Accept: application/json
 Content-Type: application/json
 
-{"cocktailId": "23b3d85a-3928-41c0-a533-6538a71e17c4"}
+279d21cb-7f2c-416a-bbf0-a39dd37becbc

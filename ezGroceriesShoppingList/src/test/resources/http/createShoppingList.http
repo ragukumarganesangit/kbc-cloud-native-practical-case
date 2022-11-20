@@ -1,5 +1,5 @@
 POST http://localhost:8080/shopping-lists
-Accept: application/json
-Content-Type: application/json
+accept: application/json
+content-yype: application/json
 
-{"shoppingListName": "Stephanie's birthday"}
+Gopi

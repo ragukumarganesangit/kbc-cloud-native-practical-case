@@ -39,5 +39,4 @@ public class CocktailTestConfiguration {
         cocktailDBResponse.setDrinks(drinks);
         return  cocktailDBResponse;
     }
-
 }

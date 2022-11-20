@@ -1,9 +1,9 @@
-GET http://localhost:8080/shopping-lists/90689338-499a-4c49-af90-f1e73068ad4f
+GET http://localhost:8080/shopping-lists/
 Accept: application/json
 Content-Type: application/json
 
 ### get all shopping lists
 
-GET http://localhost:8080/shopping-lists/6c7d09c2-8a25-4d54-a979-25ae779d2465
+GET http://localhost:8080/shopping-lists/a198ae01-955a-4eaf-b5ac-5aeabb287cbd
 Accept: application/json
 Content-Type: application/json
