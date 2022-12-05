@@ -60,6 +60,9 @@ public class CocktailDataUpdate {
                 newCocktailEntity.setName(drinkResource.getStrDrink());
                 newCocktailEntity.setIngredients(new HashSet<>(List.of(drinkResource.getStrIngredient1() != null ? drinkResource.getStrIngredient1():" ",
                         drinkResource.getStrIngredient2() != null ? drinkResource.getStrIngredient2():" ", drinkResource.getStrIngredient3() != null ? drinkResource.getStrIngredient3():" ")));
+                newCocktailEntity.setGlass(drinkResource.getStrGlass());
+                newCocktailEntity.setImage(drinkResource.getStrDrinkThumb());
+                newCocktailEntity.setInstructions(drinkResource.getStrInstructions());
                 cocktailEntity=cocktailRepository.save(newCocktailEntity);
             }
             return cocktailEntity;

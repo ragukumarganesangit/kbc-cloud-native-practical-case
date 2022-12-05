@@ -17,6 +17,7 @@ import com.ezgroceries.shoppinglist.feignclient.client.CocktailDBClient;
 import com.ezgroceries.shoppinglist.feignclient.model.CocktailDBResponse;
 import com.ezgroceries.shoppinglist.jpa.CocktailService;
 import com.ezgroceries.shoppinglist.jpa.ShoppingListService;
+import com.ezgroceries.shoppinglist.jpa.cocktail.CocktailRepository;
 import com.ezgroceries.shoppinglist.jpa.shoppinglist.ShoppingListRepository;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,9 @@ class CocktailEntityControllerTest {
     @MockBean
     private CocktailDBClient cocktailDBClient;
 
+    @MockBean
+    private CocktailDBClient.CocktailDBClientFallback cocktailDBClientFallback;
+
     @Autowired
     private CocktailDBResponse cocktailDBResponse;
 
@@ -49,6 +53,9 @@ class CocktailEntityControllerTest {
 
     @MockBean
     private CocktailService cocktailService;
+
+    @MockBean
+    private CocktailRepository cocktailRepository;
 
     @Test
     public void testGetAllCocktailController() throws Exception {

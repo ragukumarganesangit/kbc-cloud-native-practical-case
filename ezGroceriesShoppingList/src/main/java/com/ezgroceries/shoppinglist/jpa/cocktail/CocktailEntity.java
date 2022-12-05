@@ -40,6 +40,12 @@ public class CocktailEntity {
 	@Convert(converter = StringSetConverter.class)
 	private Set<String> ingredients;
 
+	private String glass;
+
+	private String image;
+
+	private String instructions;
+
 	@ManyToMany(fetch = FetchType.LAZY,
 			cascade = {
 					CascadeType.PERSIST,
@@ -98,6 +104,30 @@ public class CocktailEntity {
 		this.ingredients = ingredients;
 	}
 
+	public String getGlass() {
+		return glass;
+	}
+
+	public void setGlass(String glass) {
+		this.glass = glass;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getInstructions() {
+		return instructions;
+	}
+
+	public void setInstructions(String instructions) {
+		this.instructions = instructions;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -106,23 +136,29 @@ public class CocktailEntity {
 		if (!(o instanceof CocktailEntity)) {
 			return false;
 		}
-		CocktailEntity cocktailEntity = (CocktailEntity) o;
-		return Objects.equals(getEntityId(), cocktailEntity.getEntityId()) && Objects.equals(getDrinkId(), cocktailEntity.getDrinkId())
-				&& Objects.equals(getName(), cocktailEntity.getName()) && Objects.equals(getIngredients(), cocktailEntity.getIngredients());
+		CocktailEntity that = (CocktailEntity) o;
+		return Objects.equals(getEntityId(), that.getEntityId()) && Objects.equals(getDrinkId(), that.getDrinkId())
+				&& Objects.equals(getName(), that.getName()) && Objects.equals(getIngredients(), that.getIngredients())
+				&& Objects.equals(glass, that.glass) && Objects.equals(image, that.image) && Objects.equals(instructions,
+				that.instructions) && Objects.equals(shoppingLists, that.shoppingLists);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getEntityId(), getDrinkId(), getName(), getIngredients());
+		return Objects.hash(getEntityId(), getDrinkId(), getName(), getIngredients(), glass, image, instructions, shoppingLists);
 	}
 
 	@Override
 	public String toString() {
-		return "Cocktail{" +
+		return "CocktailEntity{" +
 				"entityId=" + entityId +
 				", drinkId='" + drinkId + '\'' +
 				", name='" + name + '\'' +
-				", ingredients='" + ingredients + '\'' +
+				", ingredients=" + ingredients +
+				", glass='" + glass + '\'' +
+				", image='" + image + '\'' +
+				", instructions='" + instructions + '\'' +
+				", shoppingLists=" + shoppingLists +
 				'}';
 	}
 }

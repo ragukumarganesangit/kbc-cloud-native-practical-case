@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CocktailRepository extends CrudRepository<CocktailEntity, UUID> {
     public List<CocktailEntity> findByDrinkIdIn(List<String> drinkId);
+    public List<CocktailEntity> findByName(String name);
+
 }

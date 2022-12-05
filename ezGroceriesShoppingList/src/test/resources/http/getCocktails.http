@@ -1,4 +1,4 @@
-GET http://localhost:8080/cocktails?search=margarita
+GET http://localhost:8080/cocktails?search=GG
 Accept: application/json
 Content-Type: application/json
 
